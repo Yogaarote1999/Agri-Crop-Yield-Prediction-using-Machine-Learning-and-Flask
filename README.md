@@ -33,18 +33,25 @@ After downloading, put the ZIP file inside the `data/` folder of the project.
 
 ## 📷 Application Screenshots
 
+## 📷 Application Screenshots
+
 ### Home Page
-![Home Page](Home%20page.png)
+![Home Page](screenshots/Home%20page.png)
 
 ### Login Page
-![Login Page](Login%20page.png)
-
-### Register Page
-![Register Page](Register%20Page.png)
+![Login Page](screenshots/Login%20page.png)
 
 ### Prediction Page
-![Prediction Page](Prediction%20page.png)
+![Prediction Page](screenshots/Prediction%20page.png)
 
-### Result Page
-![Result Page](Result%20page.png)
+### Register Page
+![Register Page](screenshots/Register%20Page.png)
+
+### Result Page — Loss
+![Loss Result](screenshots/Result%20page%20%5BLoss%5D.png)
+
+### Result Page — Profit
+![Profit Result](screenshots/Result%20page%20%5BProfit%5D.png)
+
+
 
