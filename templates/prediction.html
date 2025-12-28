@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriProfit Predictor | AgriDetect</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #00c853, #004d40);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        /* Navbar */
+        .navbar-brand i {
+            color: #00e676;
+            margin-right: 8px;
+        }
+
+        /* Glassmorphic container */
+        .glass-card {
+            margin: 40px auto;
+            padding: 35px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0px 6px 28px rgba(0,0,0,0.25);
+            width: 95%;
+            max-width: 900px;
+        }
+
+        .form-control {
+            background: rgba(255,255,255,0.8);
+            border-radius: 12px;
+            border: none;
+            height: 48px;
+        }
+
+        .form-label {
+            color: #eaffea;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background-color: #00e676;
+            border: none;
+            color: #003300;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: #1de9b6;
+        }
+
+        .btn-danger {
+            background-color: #ff5252;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #ff1744;
+        }
+
+        /* Result Card */
+        .result-box {
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.4);
+            display: none;
+        }
+
+        .result-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #caffbf;
+            margin-bottom: 15px;
+        }
+
+        .result-item {
+            font-size: 18px;
+            margin: 8px 0;
+        }
+
+        .profit {
+            font-size: 22px;
+            color:  #08160f;
+            font-weight: 700;
+        }
+
+        .loss {
+            font-size: 22px;
+            color: #dd0a0a;
+            font-weight: 700;
+        }
+
+        /* Suggestion cards */
+        .suggestion-title {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #d1fae5;
+            display: none;
+        }
+
+        .suggest-card {
+            background: rgba(255,255,255,0.35);
+            border-radius: 14px;
+            padding: 15px;
+            border-left: 6px solid #00e676;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .rank-badge {
+            background: #00e676;
+            padding: 5px 12px;
+            border-radius: 8px;
+            color: #003300;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg p-2">
+
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('home') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('contact') }}">Contact</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('prediction') }}">Predict</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Glass Card -->
+    <div class="glass-card">
+        <h2 class="text-center fw-bold mb-3">🌾 AgriProfit Predictor</h2>
+        <p class="text-center mb-4">Enter your agricultural parameters to predict crop yield, expense & profit</p>
+
+        <!-- FORM -->
+        <form id="predictForm">
+            <div class="row g-3">
+                <!-- Left Column -->
+                <div class="col-md-6">
+                    <label class="form-label">N (Nitrogen)</label>
+                    <input type="number" name="N" class="form-control" required>
+
+                    <label class="form-label mt-3">P (Phosphorus)</label>
+                    <input type="number" name="P" class="form-control" required>
+
+                    <label class="form-label mt-3">K (Potassium)</label>
+                    <input type="number" name="K" class="form-control" required>
+
+                    <label class="form-label mt-3">Temperature (°C)</label>
+                    <input type="number" name="temperature" class="form-control" required>
+
+                    <label class="form-label mt-3">Humidity (%)</label>
+                    <input type="number" name="humidity" class="form-control" required>
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-md-6">
+                    <label class="form-label">pH Level</label>
+                    <input type="number" name="ph" step="0.1" class="form-control" required>
+
+                    <label class="form-label mt-3">Rainfall (mm)</label>
+                    <input type="number" name="rainfall" class="form-control" required>
+
+                    <label class="form-label mt-3">Fertilizer Usage (kg/ha)</label>
+                    <input type="number" name="fertilizer" class="form-control" required>
+
+                    <label class="form-label mt-3">Pesticide Usage (L/ha)</label>
+                    <input type="number" name="pesticide" class="form-control" required>
+
+                    <label class="form-label mt-3">Other Expense (INR/ha)</label>
+                    <input type="number" name="other" class="form-control" required>
+                </div>    
+                <div class="col-12 d-flex justify-content-center mt-3">
+                  <div style="width:450px;">
+                    <label class="form-label">Market Price (₹/kg)</label>
+                    <input type="number" name="market_price" class="form-control" required>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <button type="submit" class="btn btn-primary mt-4 w-100">🌱 Predict Now</button>
+            <button type="button" id="refreshBtn" class="btn btn-danger mt-3 w-100">🔄 Refresh Page</button>
+        </form>
+
+        <!-- RESULT -->
+        <div id="resultBox" class="result-box mt-4"></div>
+
+        <!-- Suggestions -->
+        <div id="suggestionTitle" class="suggestion-title">🌱 Top 3 Most Profitable Crops</div>
+        <div id="suggestionContainer" class="row g-3 mt-2"></div>
+
+        <!-- Chart -->
+        <canvas id="profitChart" style="margin-top:20px;"></canvas>
+
+        <button id="downloadPDF" class="btn btn-primary w-100 mt-4">📄 Download PDF Report</button>
+        <button id="logoutConfirm" class="btn btn-info w-100 mt-3" style="font-weight:600;">
+          🔐 Logout
+        </button>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 AgriDetect. All rights reserved.</p>
+    </div>
+
+    <!-- JS Logic (Same as your original but UI adapted) -->
+    <script>
+        const form = document.getElementById("predictForm");
+        const resultBox = document.getElementById("resultBox");
+        const suggestionTitle = document.getElementById("suggestionTitle");
+        const suggestionContainer = document.getElementById("suggestionContainer");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const fd = new FormData(form);
+            const data = Object.fromEntries(fd.entries());
+
+            resultBox.style.display = "block";
+            resultBox.innerHTML = "<h4>⏳ Predicting...</h4>";
+
+            try {
+                const response = await fetch("/api/predict_all", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                window.latestPredictionData = result;
+
+                const expense = parseFloat(result.Total_Expense);
+                const revenue = parseFloat(result.Predicted_Revenue);
+                const profit = parseFloat(result.Profit);
+                const loss = parseFloat(result.Loss);
+                const isProfit = profit > 0;
+
+                resultBox.innerHTML = `
+                    <div class="result-title">🌾 Prediction Result</div>
+                    <div class="result-item"><b>Predicted Crop:</b> ${result.Predicted_Crop}</div>
+                    <div class="result-item"><b>Predicted Yield:</b> ${result.Predicted_Yield}</div>
+                    <div class="result-item"><b>Predicted Expense:</b> ₹${expense.toFixed(2)}</div>
+                    <div class="result-item"><b>Predicted Revenue:</b> ₹${revenue.toFixed(2)}</div>
+                    <div class="${isProfit ? 'profit' : 'loss'}">
+                        ${isProfit ? '📈 Predicted Profit: ₹' + profit.toFixed(2) : '📉Predicted Loss: ₹' + loss.toFixed(2)}
+                    </div>
+`               ;
+
+
+                // Suggestions
+                if (result.show_suggestions) {
+                    suggestionTitle.style.display = "block";
+                    suggestionContainer.innerHTML = "";
+                } else {
+                    suggestionTitle.style.display = "block";
+                    suggestionTitle.innerHTML = "❗ No profitable crop under current conditions";
+                    suggestionContainer.innerHTML = "";
+                    return;   // stop here, don't draw list
+                }
+
+
+                let chartLabels = [];
+                let chartValues = [];
+
+                result.Best_Crops.forEach((crop, i) => {
+                    suggestionContainer.innerHTML += `
+                        <div class="col-md-4">
+                            <div class="suggest-card">
+                                <span class="rank-badge">#${i+1}</span>
+                                <div><b>Crop:</b> ${crop.Crop}</div>
+                                <div><b>Yield:</b> ${crop.Yield}</div>
+                                <div><b>Profit:</b> ₹${crop.Profit}</div>
+                            </div>
+                        </div>
+                    `;
+
+                    chartLabels.push(crop.Crop);
+                    chartValues.push(parseFloat(crop.Profit));
+                });
+
+                chartLabels.push(result.Predicted_Crop + " (You)");
+                chartValues.push(profit);
+
+                // Chart.js
+                const ctx = document.getElementById("profitChart").getContext("2d");
+                if (window.chartInstance) window.chartInstance.destroy();
+
+                window.chartInstance = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: chartLabels,
+                        datasets: [{
+                            label: "Profit (₹)",
+                            data: chartValues,
+                            backgroundColor: "#00e676",
+                            borderRadius: 10
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins:{ legend:{ display:false }},
+                        scales:{ y:{ beginAtZero:true, ticks:{ color:"#fff" }}, x:{ ticks:{ color:"#fff" }} }
+                    }
+                });
+
+            } catch (e) {
+                resultBox.innerHTML = "❌ Error: " + e.message;
+            }
+        });
+
+        // Refresh
+        document.getElementById("refreshBtn").onclick = () => location.reload();
+
+        // PDF
+        document.getElementById("downloadPDF").addEventListener("click", async () => {
+
+            // 1. Capture profit chart as Base64 image
+            const chartImage = document.getElementById("profitChart").toDataURL("image/png");
+
+            // 2. Include chart image inside prediction data
+            const payload = {
+                ...window.latestPredictionData,
+                chart_image: chartImage
+            };
+
+            // 3. Send to Flask PDF API
+            const response = await fetch("/download_report", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(payload)
+            });
+
+            // 4. Generate PDF
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "AgriProfit_Report.pdf";
+            a.click();
+        });
+
+    // your existing JS above...
+
+        document.getElementById("logoutConfirm").addEventListener("click", function () {
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = "{{ url_for('logout') }}";
+            }
+        });
+
+</script>
+
+
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
