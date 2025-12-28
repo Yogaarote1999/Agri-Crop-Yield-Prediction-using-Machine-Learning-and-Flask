@@ -31,3 +31,20 @@ https://drive.google.com/file/d/1fG-qh6Bfmw95PVHYWA_TcLu2zLG5dSAT/view?usp=shari
 
 After downloading, put the ZIP file inside the `data/` folder of the project.
 
+## 📷 Application Screenshots
+
+### Home Page
+![Home Page](Home%20page.png)
+
+### Login Page
+![Login Page](Login%20page.png)
+
+### Register Page
+![Register Page](Register%20Page.png)
+
+### Prediction Page
+![Prediction Page](Prediction%20page.png)
+
+### Result Page
+![Result Page](Result%20page.png)
+
