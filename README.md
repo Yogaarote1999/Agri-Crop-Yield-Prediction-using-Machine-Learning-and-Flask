@@ -33,10 +33,6 @@ After downloading, put the ZIP file inside the `data/` folder of the project.
 
 ## 📷 Application Screenshots
 
-## 📷 Application Screenshots
-
-## 📷 Application Screenshots
-
 ### Home Page
 ![Home Page](screenshots/Home%20page.png)
 
@@ -54,6 +50,7 @@ After downloading, put the ZIP file inside the `data/` folder of the project.
 
 ### Result Page — Loss
 ![Loss Result](screenshots/Result%20page%20%5BLoss%5D.png)
+
 
 
 
